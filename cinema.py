@@ -51,7 +51,8 @@ class Hall:
         for i in range(self._rows):
             for j in range(self._cols):
                 if self._seats[id][i][j] == 'free':
-                    print(f"Row: {i + 1}, Col: {j + 1}")
+                    print(f"Seat ({i + 1}, {j + 1})")
+
 
 
 class Counter:
@@ -59,13 +60,15 @@ class Counter:
         self._hall_list = Star_Cinema._hall_list
 
     def view_all_shows(self):
-        print("All shows running:")
+        print("All shows running today:")
         for hall in self._hall_list:
+            print(f"Hall {hall._hall_no}:")
             hall.view_show_list()
 
     def view_available_seats_in_show(self, hall_no, show_id):
         for hall in self._hall_list:
             if hall._hall_no == hall_no:
+                print(f"Hall {hall_no}:")
                 hall.view_available_seats(show_id)
                 return
         print("Invalid hall number")
@@ -77,14 +80,43 @@ class Counter:
                 return
         print("Invalid hall number")
 
+    def show_options(self):
+        while True:
+            print("\nOptions:")
+            print("1. View all shows today")
+            print("2. View available seats in a show")
+            print("3. Book tickets")
+            print("4. Exit")
 
-# example :
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                self.view_all_shows()
+            elif choice == "2":
+                hall_no = int(input("Enter hall number: "))
+                show_id = input("Enter show ID: ")
+                self.view_available_seats_in_show(hall_no, show_id)
+            elif choice == "3":
+                hall_no = int(input("Enter hall number: "))
+                show_id = input("Enter show ID: ")
+                num_seats = int(input("Enter number of seats to book: "))
+                seat_list = []
+                for _ in range(num_seats):
+                    row = int(input("Enter row number: "))
+                    col = int(input("Enter column number: "))
+                    seat_list.append((row, col))
+                self.book_tickets(hall_no, show_id, seat_list)
+            elif choice == "4":
+                print("Exiting...")
+                break
+            else:
+                print("Invalid choice")
+
+
+# example:
 hall1 = Hall(rows=5, cols=10, hall_no=1)
 hall1.entry_show(id="show1", movie_name="Avengers", time="12:00 PM")
 hall1.book_seats(id="show1", seat_list=[(1, 1), (2, 2)])
-hall1.view_show_list()
-hall1.view_available_seats(id="show1")
-
 
 hall2 = Hall(rows=6, cols=8, hall_no=2)
 hall2.entry_show(id="show2", movie_name="Inception", time="3:00 PM")
@@ -96,11 +128,7 @@ hall3.entry_show(id="show5", movie_name="The Dark Knight", time="7:00 PM")
 
 # example of Counter
 counter = Counter()
-counter.view_all_shows()
-counter.view_available_seats_in_show(hall_no=1, show_id="show1")
-counter.view_available_seats_in_show(hall_no=2, show_id="show2")
-counter.view_available_seats_in_show(hall_no=3, show_id="show4")
+counter.show_options()
 
-counter.book_tickets(hall_no=2, show_id="show3", seat_list=[(3, 4), (4, 5)])
-counter.book_tickets(hall_no=3, show_id="show5", seat_list=[(2, 3), (3, 4), (5, 6)])
+
 
